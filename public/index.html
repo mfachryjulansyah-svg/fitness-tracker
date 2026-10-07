@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Semapta Basarnas — Pelacak Kebugaran</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="topbar-title">
+      <span class="topbar-emoji">🌲</span>
+      <div>
+        <p class="brand-title">SEMAPTA BASARNAS</p>
+        <h1 id="userName">Latihan Hari Ini</h1>
+        <p class="topbar-date" id="todayDate"></p>
+      </div>
+    </div>
+    <button class="settings-btn" id="openSettings" title="Pengaturan berat badan">⚙️</button>
+  </header>
+
+  <section class="hero">
+    <p class="hero-label">Kalori terbakar hari ini</p>
+    <p class="hero-number" id="heroKalori">0</p>
+    <p class="hero-unit">kkal &middot; dihitung otomatis dari repetisi &amp; durasi</p>
+  </section>
+
+  <section class="summary-grid">
+    <div class="summary-card">
+      <span class="summary-emoji">💪</span>
+      <p class="summary-value" id="sumReps">0</p>
+      <p class="summary-label">Repetisi</p>
+    </div>
+    <div class="summary-card">
+      <span class="summary-emoji">⏱️</span>
+      <p class="summary-value" id="sumWaktu">0</p>
+      <p class="summary-label">Menit Latihan</p>
+    </div>
+    <div class="summary-card">
+      <span class="summary-emoji" id="sumMoodEmoji">😊</span>
+      <p class="summary-value" id="sumMood">—</p>
+      <p class="summary-label">Mood</p>
+    </div>
+    <div class="summary-card">
+      <span class="summary-emoji">⚖️</span>
+      <p class="summary-value" id="sumWeight">65</p>
+      <p class="summary-label">Berat (kg)</p>
+    </div>
+    <div class="summary-card">
+      <span class="summary-emoji">📉</span>
+      <p class="summary-value" id="sumEstimatedLoss">0.000</p>
+      <p class="summary-label">Estimasi turun (kg)</p>
+    </div>
+    <div class="summary-card">
+      <span class="summary-emoji">✅</span>
+      <p class="summary-value" id="sumSessions">0</p>
+      <p class="summary-label">Sesi Latihan</p>
+    </div>
+  </section>
+
+  <section class="exercises">
+    <h2>Catat Latihan</h2>
+    <div class="tabs" id="exerciseTabs"></div>
+
+    <div id="exerciseEntry" class="exercise-entry">
+        <form id="repsForm" class="log-form hidden">
+      <label>
+        Jumlah repetisi
+        <input type="number" id="repsInput" min="1" placeholder="cth: 20" required />
+      </label>
+      <div class="quick-add">
+        <button type="button" data-add="5">+5</button>
+        <button type="button" data-add="10">+10</button>
+        <button type="button" data-add="20">+20</button>
+      </div>
+      <p class="calc-preview" id="repsPreview"></p>
+      <button type="submit" class="submit-btn">Simpan Latihan</button>
+      </form>
+
+      <form id="lariForm" class="log-form hidden">
+      <label>
+        Jarak (km)
+        <input type="number" id="jarakInput" min="0.1" step="0.1" placeholder="cth: 2.5" required />
+      </label>
+      <label>
+        Durasi (menit)
+        <input type="number" id="durasiInput" min="1" step="1" placeholder="cth: 15" required />
+      </label>
+      <p class="calc-preview" id="lariPreview"></p>
+      <p class="pace-preview" id="pacePreview"></p>
+      <button type="submit" class="submit-btn">Simpan Latihan</button>
+        </form>
+    </div>
+
+    <form id="moodForm" class="mood-form hidden">
+      <label class="mood-field">
+        Mood
+        <select id="moodInput" required>
+          <option value="">Pilih mood</option>
+          <option value="😊">😊 Senang</option>
+          <option value="😐">😐 Biasa saja</option>
+          <option value="😢">😢 Sedih</option>
+          <option value="😠">😠 Marah</option>
+        </select>
+      </label>
+      <button type="submit" class="submit-btn">Simpan Mood</button>
+    </form>
+
+    <form id="photoForm" class="photo-form hidden">
+      <label class="photo-field">
+        Dokumentasi Foto
+        <input type="file" id="photoInput" accept="image/*" required />
+      </label>
+      <img id="photoPreview" class="photo-preview hidden" alt="Preview dokumentasi" />
+      <button type="submit" class="submit-btn">Simpan Dokumentasi</button>
+      <div id="photoHistory" class="photo-history"></div>
+    </form>
+  </section>
+
+  <section class="history">
+    <h2>Riwayat Hari Ini</h2>
+    <ul class="history-list" id="historyList">
+      <li class="history-empty">Belum ada latihan tercatat hari ini.</li>
+    </ul>
+  </section>
+
+</div>
+
+<div class="modal hidden" id="settingsModal">
+  <div class="modal-box">
+    <h3 id="settingsTitle">Pengaturan</h3>
+    <label>
+      Nama
+      <input type="text" id="settingsNama" />
+    </label>
+    <label>
+      Berat badan (kg)
+      <input type="number" id="settingsBerat" min="0.1" step="0.1" required />
+    </label>
+    <p class="modal-hint">Berat badan dipakai untuk menghitung kalori secara otomatis.</p>
+    <div class="modal-actions">
+      <button id="closeSettings" class="btn-secondary">Batal</button>
+      <button id="saveSettings" class="submit-btn">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
